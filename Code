@@ -1,20 +1,26 @@
 def hand_total(hand):
-    total = 0
-    aces = 0
-    for card in hand:
-        if card in ['J', 'K', 'Q']:
-            total += 10
-        elif card in 'A':
-            aces += 1
-        else: total += int(card)
+    total = 0  # Total value of the hand
+    aces = 0   # Count of aces
 
-    total += aces
+    for card in hand:
+        if card in ['J', 'K', 'Q']:  # Face cards are worth 10
+            total += 10
+        elif card == 'A':            # Count ace, but initially as 1
+            aces += 1
+            total += 1
+        else:
+            total += int(card)       # Numeric cards add their face value
+
+    # Upgrade aces from 1 to 11 where possible (without going over 21)
     while total + 10 <= 21 and aces > 0:
         total += 10
         aces -= 1
+
     return total
 
 def blackjack_hand_greater_than(hand_1, hand_2):
     total_1 = hand_total(hand_1)
     total_2 = hand_total(hand_2)
+
+    # Hand 1 wins if it's ≤ 21 and beats hand 2, or if hand 2 busts
     return total_1 <= 21 and (total_1 > total_2 or total_2 > 21)
